@@ -15,13 +15,13 @@ title: <my-element> ⌲ Home
 `<my-element>` is just an HTML element. You can it anywhere you can use HTML!
 
 ```html
-<my-element></my-element>
+<override-styles><my-element></my-element></override-styles>
 ```
 
   </div>
   <div>
 
-<my-element></my-element>
+<override-styles><my-element></my-element></override-styles>
 
   </div>
 </section>

@@ -10,9 +10,10 @@ import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 
 export default {
-  input: 'my-element.js',
+  // Any input that ends with .js
+  input: 'index.js',
   output: {
-    file: 'my-element.bundled.js',
+    file: 'min.bundled.js',
     format: 'esm',
   },
   onwarn(warning) {
