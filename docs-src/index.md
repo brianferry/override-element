@@ -16,12 +16,13 @@ title: <my-element> ⌲ Home
 
 ```html
 <override-styles><my-element></my-element></override-styles>
+            <override-styles><template slot="styles"><style> :host { color: pink }</style></template><my-element></my-element></override-styles>
 ```
 
   </div>
   <div>
 
-<override-styles><my-element></my-element></override-styles>
+<override-styles><template slot="styles"><style> :host { color: pink }</style></template><my-element></my-element></override-styles>
 
   </div>
 </section>

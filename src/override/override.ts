@@ -1,37 +1,46 @@
-import {LitElement, html, css} from 'lit';
+import {LitElement, html} from 'lit';
 import type { PropertyValues } from 'lit';
 import {customElement} from 'lit/decorators.js';
 
 @customElement('override-styles')
 export class OverrideStyles extends LitElement {
 
-  static override styles = [
-    css` 
-      :host { color: pink; }
-    `
-  ];
-
-  getSlottedElements() {
+  getStyleSlottedElement() {
     if (!this.renderRoot) return;
-    const elements = this.renderRoot?.querySelector('slot')?.assignedNodes({ flatten: true});
+    // @ts-ignore
+    const elements = this.renderRoot?.querySelector('slot[name="styles"]')?.assignedNodes({ flatten: true});
+    return elements;
+  }
+
+  getAnonymousSlottedElement() {
+    if (!this.renderRoot) return;
+    const elements = this.renderRoot?.querySelectorAll('slot')[1]?.assignedNodes({ flatten: true});
     return elements;
   }
 
   override firstUpdated(_changedProperties: PropertyValues<this>) {
     // @ts-ignore
-    const myElements = this.getSlottedElements() as HTMLElement[];
+    const anonymousSlot = this.getAnonymousSlottedElement()[0] as HTMLElement;
+    const styleSlot = this.getStyleSlottedElement()[0] as HTMLElement;
 
-    myElements?.forEach((myElement: HTMLElement) => {
+    console.log('anonymousSlot', anonymousSlot);
+    console.log('styleSlot', styleSlot);
+
+    // @ts-ignore
+    if (anonymousSlot && anonymousSlot.shadowRoot && anonymousSlot.shadowRoot.adoptedStyleSheets !== undefined) {
+      const styleSheet = new CSSStyleSheet();
+      console.log('gets here');
       // @ts-ignore
-      if (myElement && myElement.shadowRoot && myElement.shadowRoot.adoptedStyleSheets !== undefined) {
-        // @ts-ignore
-        myElement.shadowRoot.adoptedStyleSheets = [...myElement.shadowRoot.adoptedStyleSheets, this.constructor.styles];
-      }
-    });
+      styleSheet.replaceSync(styleSlot.innerHTML.replace('<style>', '').replace('</style>', '').trim());
+      console.log('styleSheet', styleSheet);
+      // @ts-ignore
+      anonymousSlot.shadowRoot.adoptedStyleSheets = [...anonymousSlot.shadowRoot.adoptedStyleSheets, styleSheet];
+    }
   }
 
   override render() {
     return html`
+      <slot name="styles"></slot>
       <slot></slot>
     `;
   }

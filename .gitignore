@@ -4,6 +4,7 @@
 custom-elements.json
 # top level source
 **.js
+**.js.map
 **.d.ts
 **.d.ts.map
 # only generated for size check
